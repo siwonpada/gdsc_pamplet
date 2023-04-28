@@ -1,0 +1,77 @@
+Project Pamplet {
+    database_type: 'mariadb'
+}
+
+Table User {
+    id int [pk, increment]
+    nickname varchar
+    department varchar
+}
+
+Table Booth {
+    id int [pk, increment]
+    name varchar
+    current_attendee_count int
+    short_description varchar  
+    long_description varchar
+    image varchar
+    status varchar
+    tags_id int [ref: <> Tag.id]
+    items_id int [ref: <> Item.id]
+    subscribe_user_id int [ref: <> User.id]
+    nearest_beacon_id int [ref: <> Beacon.id]
+}
+
+Table Tag {
+    id int [pk, increment]
+    name varchar
+}
+
+Table Item {
+    id int [pk, increment]
+    name varchar
+    description varchar
+    price int
+    image varchar
+}
+
+Table Event {
+    id int [pk, increment]
+    name varchar
+    liked_user_id int [ref: <> User.id]
+}
+
+Table Beacon {
+    id int [pk, increment]
+    location varchar
+}
+
+Table Map {
+    id int [pk, increment]
+    name varchar
+    image varchar
+    sections_id int [ref: < Section.id]
+}
+
+Table Section {
+    id int [pk, increment]
+    name varchar
+    blocks varchar
+    booths_id int [ref: - Booth.id]
+}
+
+Table Exhibition {
+    id int [pk, increment]
+    name varchar
+    booth_id int [ref: < Booth.id]
+    map_id int [ref: < Map.id]
+}
+
+Table Ticket {
+    id int [pk, increment]
+    name varchar
+    price int
+    description varchar
+    exhibition_id int [ref: < Exhibition.id]
+    user_id int [ref: < User.id]
+}
