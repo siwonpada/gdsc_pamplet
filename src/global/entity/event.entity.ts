@@ -7,4 +7,7 @@ export class Event extends BaseEntity {
 
     @Column('varchar', { name: 'name' })
     name: string
+
+    @Column('int', { name: 'like' })
+    like: number
 }
