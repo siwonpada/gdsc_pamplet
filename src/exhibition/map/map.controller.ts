@@ -1,16 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { MapService } from './map.service';
 import { CreateMapDto } from './dto/createMap.dto';
 import { UpdateSectionsDto } from './dto/updateSection.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @Controller('exhibitions/:exhibitionId/maps')
 @ApiTags('exhibitions')
@@ -23,6 +15,7 @@ export class MapController {
   }
 
   @Get(':id')
+  @ApiParam({ name: 'exhibitionId', type: Number })
   async getMap(@Param('id') id: number) {
     return this.mapService.getMap(id);
   }
@@ -35,9 +28,10 @@ export class MapController {
     return this.mapService.createMap(exhibitionId, createMapDto);
   }
 
-  @Patch('/section')
+  @Patch('/:id/section')
+  @ApiParam({ name: 'exhibitionId', type: Number })
   async updateSection(
-    @Query('id') id: number,
+    @Param('id') id: number,
     @Body() sections: UpdateSectionsDto,
   ) {
     return this.mapService.updateSection(id, sections);

@@ -1,25 +1,25 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsArray, IsNumber, IsString, ValidateNested } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
 
 export class UpdataSectionDto {
-    @IsString()
-    @ApiProperty()
-    name: string;
+  @IsString()
+  @ApiProperty()
+  name: string;
 
-    @IsNumber({}, {each: true})
-    @ApiProperty()
-    block: number[];
-    
-    @IsNumber()
-    @ApiProperty()
-    level: number;
+  @IsNumber({}, { each: true })
+  @ApiProperty({ type: [Number], default: [0, 0, 0, 0] })
+  block: number[];
+
+  @IsNumber()
+  @ApiProperty()
+  level: number;
 }
 
 export class UpdateSectionsDto {
-    @IsArray()
-    @ValidateNested({each: true})
-    @Type(()=>UpdataSectionDto)
-    @ApiProperty({type: [UpdataSectionDto]})
-    sections: UpdataSectionDto[];
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UpdataSectionDto)
+  @ApiProperty({ type: [UpdataSectionDto] })
+  sections: UpdataSectionDto[];
 }
