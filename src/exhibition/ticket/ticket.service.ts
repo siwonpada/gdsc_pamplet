@@ -15,6 +15,10 @@ export class TicketService {
     @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
   ) {}
 
+  async getTicket(uuid: string): Promise<Ticket> {
+    return this.ticketRepository.findOne({ where: { uuid }, relations: ['role', 'exhibition'] });
+  }
+
   async createTicket({
     name,
     description,
@@ -31,7 +35,7 @@ export class TicketService {
     if (!role) {
       role = await this.roleRepository.save({ name: role_name });
     }
-    return this.ticketRepository.create({ name, description, price, role });
+    return this.ticketRepository.create({ name, description, price, role, exhibition });
   }
 
   async deleteTicket(uuid: string): Promise<Ticket> {
