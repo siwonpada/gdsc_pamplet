@@ -23,6 +23,15 @@ export class BoothService {
     return this.boothRepository.save({ ...boothDto });
   }
 
+  async updateAttendeeCount(boothId: number, attendeeCount: number): Promise<Booth> {
+    const booth = await this.boothRepository.findOne({where: {id: boothId}});
+    if (!booth) {
+      throw new NotFoundException(`Booth with id ${boothId} not found`);
+    }
+    booth.currentAttendeeCount = attendeeCount;
+    return this.boothRepository.save(booth);
+  }
+
   async deleteBooth(boothId: number): Promise<void> {
     const deleteResult = await this.boothRepository.delete(boothId);
     if (deleteResult.affected === 0) {

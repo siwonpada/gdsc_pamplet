@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Patch, Query } from '@nestjs/common';
 import { BoothService } from './booth.service';
 import { Booth } from 'src/global/entity/booth.entity';
 import { CreateBoothDto } from './dto/createBooth.dto';
@@ -20,6 +20,11 @@ export class BoothController {
     @Post('')
     async createBooth(@Body() boothDto: CreateBoothDto): Promise<Booth> {
         return this.boothService.createBooth(boothDto);
+    }
+
+    @Patch('/attendee')
+    async updateAttendeeCount(@Query('id') id: number, @Body() attendeeCount: number): Promise<Booth> {
+        return this.boothService.updateAttendeeCount(id, attendeeCount);
     }
 
     @Delete('')

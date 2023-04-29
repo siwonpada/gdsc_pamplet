@@ -25,6 +25,6 @@ import { DatabaseConfigService } from './global/config/database/databaseConfig.s
     TagModule,
   ],
   controllers: [AppController],
-  providers: [AppService, BoothService],
+  providers: [AppService],
 })
 export class AppModule {}
