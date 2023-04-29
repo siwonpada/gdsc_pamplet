@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { BoothService } from './booth/booth.service';
 import { BoothModule } from './booth/booth.module';
 import { ExhibitionModule } from './exhibition/exhibition.module';
 import { UserModule } from './user/user.module';
-import { TagModule } from './tag/tag.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseConfigModule } from './global/config/database/databaseConfig.module';
 import { DatabaseConfigService } from './global/config/database/databaseConfig.service';
+import { AuthModule } from './auth/auth.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -22,9 +20,8 @@ import { DatabaseConfigService } from './global/config/database/databaseConfig.s
     BoothModule,
     ExhibitionModule,
     UserModule,
-    TagModule,
+    AuthModule,
+    ImageModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

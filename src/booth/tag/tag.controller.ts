@@ -1,8 +1,8 @@
-import { Controller, Query, Get, Delete } from '@nestjs/common';
+import { Controller, Get, Delete, Query } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { Tag } from 'src/global/entity/tag.entity';
 
-@Controller('tag')
+@Controller('booth/tag')
 export class TagController {
     constructor(private readonly tagservice: TagService) {}
 
