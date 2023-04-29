@@ -16,6 +16,7 @@ export class Map extends BaseEntity {
     exhibition: Exhibition
 
     @OneToOne(()=>Image, image=>image.id, {onDelete: 'CASCADE'})
+    @JoinColumn({name: 'image_id'})
     image: Image
 
     @OneToMany(()=>Section, section=>section.map, {onDelete: 'CASCADE'})

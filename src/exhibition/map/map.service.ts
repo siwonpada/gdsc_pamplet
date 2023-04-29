@@ -35,8 +35,9 @@ export class MapService {
     const image = await this.imageRepository.findOne({
       where: { id: image_id },
     });
-    const map = this.mapRepository.create({ exhibition, image, name });
+    const map = await this.mapRepository.save({name, exhibition, image})
     const data = await this.getAnalysis(file);
+
     for (const section of data) {
       const newSection = this.sectionRepository.create({
         block: section.bbox,
@@ -44,10 +45,9 @@ export class MapService {
         map,
         name: 'section',
       });
-      await this.sectionRepository.save(newSection);
+      await this.sectionRepository.insert(newSection);
     }
-
-    return this.mapRepository.save(map);
+    return map;
   }
 
   async getAnalysis(file: Express.Multer.File): Promise<AiReturn[]> {
