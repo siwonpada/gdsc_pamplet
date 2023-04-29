@@ -10,4 +10,9 @@ export class CreateMapDto {
     @IsInt()
     @ApiProperty()
     exhibition_id: number;
+
+    @IsNumber()
+    @IsInt()
+    @ApiProperty()
+    image_id: number;
 }

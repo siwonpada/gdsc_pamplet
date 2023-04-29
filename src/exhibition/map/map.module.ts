@@ -9,8 +9,11 @@ import { Image } from 'src/global/entity/image.entity';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Map, Section, Exhibition, Image]), HttpModule],
+  imports: [
+    TypeOrmModule.forFeature([Map, Section, Exhibition, Image]),
+    HttpModule,
+  ],
   controllers: [MapController],
-  providers: [MapService]
+  providers: [MapService],
 })
 export class MapModule {}
