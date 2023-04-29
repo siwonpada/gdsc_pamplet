@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   const config = new DocumentBuilder().setTitle('Pamplet API').build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
