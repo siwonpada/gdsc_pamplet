@@ -18,8 +18,8 @@ export class BoothController {
     }
 
     @Post('')
-    async createBooth(@Body() boothDto: CreateBoothDto): Promise<Booth> {
-        return this.boothService.createBooth(boothDto);
+    async createBooth(@Body() boothDto: CreateBoothDto, @Query('exhibition_id') exhibitionId: number): Promise<Booth> {
+        return this.boothService.createBooth(boothDto, exhibitionId);
     }
 
     @Patch('/attendee')

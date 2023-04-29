@@ -7,9 +7,10 @@ import { EventModule } from './event/event.module';
 import { ItemModule } from './item/item.module';
 import { TagModule } from './tag/tag.module';
 import { User } from 'src/global/entity/user.entity';
+import { Exhibition } from 'src/global/entity/exhibition.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Booth, User]), EventModule, ItemModule, TagModule],
+  imports: [TypeOrmModule.forFeature([Booth, User, Exhibition]), EventModule, ItemModule, TagModule],
   controllers: [BoothController],
   providers: [BoothService],
 })

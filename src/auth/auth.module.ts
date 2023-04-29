@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthStrategy } from './guard/auth.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Booth, Exhibition, User]),ConfigModule,JwtModule.registerAsync({
@@ -17,7 +18,7 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: configService.get<string>('JWT_EXPIRATION') },
     }),
   })],
-  providers: [AuthService],
+  providers: [AuthService, AuthStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

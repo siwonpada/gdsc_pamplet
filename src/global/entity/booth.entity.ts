@@ -16,7 +16,7 @@ export class Booth extends BaseEntity {
     @Column('int', { name: 'current_attendee_count', default: 0 })
     currentAttendeeCount: number;
 
-    @Column('varchar', { name: 'short_description' })
+    @Column('varchar', { name: 'short_description', default: '' })
     shortDescription: string;
 
     @Column('text', { name: 'long_description' })

@@ -35,7 +35,7 @@ export class TicketService {
     if (!role) {
       role = await this.roleRepository.save({ name: role_name });
     }
-    return this.ticketRepository.create({ name, description, price, role, exhibition });
+    return this.ticketRepository.save({ name, description, price, role, exhibition });
   }
 
   async deleteTicket(uuid: string): Promise<Ticket> {
