@@ -4,6 +4,7 @@ import { Booth, BoothStatus } from 'src/global/entity/booth.entity';
 import { Repository } from 'typeorm';
 import { CreateBoothDto } from './dto/createBooth.dto';
 import { User } from 'src/global/entity/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class BoothService {
@@ -27,7 +28,9 @@ export class BoothService {
   }
 
   async createBooth(boothDto: CreateBoothDto): Promise<Booth> {
-    return this.boothRepository.save({ ...boothDto });
+    const {password, ...rest} = boothDto;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return this.boothRepository.save({ ...rest, password: hashedPassword });
   }
 
   async updateAttendeeCount(boothId: number, attendeeCount: number): Promise<Booth> {

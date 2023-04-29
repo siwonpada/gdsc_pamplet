@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsString, Max, Min } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, Max, Min } from "class-validator";
 
 export class CreateBoothDto {
     @ApiProperty()
@@ -19,4 +19,9 @@ export class CreateBoothDto {
     @Max(2)
     @Min(0)
     status: number
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    password: string
 }

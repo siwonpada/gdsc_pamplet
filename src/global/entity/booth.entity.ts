@@ -25,6 +25,9 @@ export class Booth extends BaseEntity {
     @Column('int', { name: 'status', default: 0})
     status: number;
 
+    @Column('varchar', { name: 'password', select: false, nullable: true })
+    password: string;
+
     @OneToOne(()=>Image, image=>image.id)
     @JoinColumn({name: 'image_id'})
     image: Image;
