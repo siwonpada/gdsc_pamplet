@@ -11,6 +11,7 @@ import { catchError, firstValueFrom } from 'rxjs';
 import { AxiosError } from 'axios';
 import FormData from 'form-data';
 import { AiReturn } from './type/AiReturn.type';
+import { UpdateSectionsDto } from './dto/updateSection.dto';
 
 @Injectable()
 export class MapService {
@@ -35,7 +36,7 @@ export class MapService {
     const image = await this.imageRepository.findOne({
       where: { id: image_id },
     });
-    const map = await this.mapRepository.save({name, exhibition, image})
+    let map = await this.mapRepository.save({name, exhibition, image})
     const data = await this.getAnalysis(file);
 
     for (const section of data) {
@@ -47,7 +48,23 @@ export class MapService {
       });
       await this.sectionRepository.insert(newSection);
     }
+    map = await this.mapRepository.findOne({where: {id: map.id}, relations: ['section']});
     return map;
+  }
+
+  async updateSection(id: number, {sections}: UpdateSectionsDto): Promise<Map> {
+    await this.sectionRepository.delete({id});
+    const map = await this.mapRepository.findOne({where: {id}, relations: ['section']});
+    for (const section of sections) {
+      const newSection = this.sectionRepository.create({
+        block: section.block,
+        level: section.level,
+        map,
+        name: section.name,
+      });
+      await this.sectionRepository.insert(newSection);
+    }
+    return this.mapRepository.findOne({where: {id}, relations: ['section']});
   }
 
   async getAnalysis(file: Express.Multer.File): Promise<AiReturn[]> {
