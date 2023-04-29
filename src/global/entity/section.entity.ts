@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Map } from "./map.entity";
 
 @Entity()
 export class Section extends BaseEntity {
@@ -10,4 +11,8 @@ export class Section extends BaseEntity {
 
     @Column('varchar', { name: 'block' })
     block: string
+
+    @ManyToOne(()=>Map, map=>map.id, {onDelete: 'CASCADE'})
+    @JoinColumn({name: 'map_id'})
+    map: Map
 }

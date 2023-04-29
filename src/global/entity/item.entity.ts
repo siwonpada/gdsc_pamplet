@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Booth } from "./booth.entity";
 
 @Entity()
 export class Item extends BaseEntity {
@@ -16,4 +17,8 @@ export class Item extends BaseEntity {
 
     @Column('varchar', { name: 'image' })
     image: string
+
+    @ManyToOne(()=>Booth, booth=>booth.id, {onDelete: 'CASCADE'})
+    @JoinColumn({name: 'booth_id'})
+    booth: Booth
 }

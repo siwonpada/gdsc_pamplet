@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Exhibition } from "./exhibition.entity";
 
 @Entity()
 export class Map extends BaseEntity {
@@ -10,4 +11,8 @@ export class Map extends BaseEntity {
     
     @Column('varchar', { name: 'image' })
     image: string
+
+    @ManyToOne(()=>Exhibition, exhibition=>exhibition.id, {onDelete: 'CASCADE'})
+    @JoinColumn({name: 'exhibition_id'})
+    exhibition: Exhibition
 }

@@ -1,4 +1,8 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Section } from "./section.entity";
+import { Exhibition } from "./exhibition.entity";
+import { Tag } from "./tag.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class Booth extends BaseEntity {
@@ -22,6 +26,22 @@ export class Booth extends BaseEntity {
 
     @Column('int', { name: 'status', default: 0})
     status: number;
+
+    @OneToOne(()=>Section, section=>section.id)
+    @JoinColumn({name: 'section_id'})
+    section: Section;
+
+    @ManyToOne(()=>Exhibition, exhibition=>exhibition.id, {onDelete: 'CASCADE'})
+    @JoinColumn({name: 'exhibition_id'})
+    exhibition: Exhibition;
+
+    @ManyToMany(()=>Tag, tag=>tag.id)
+    @JoinTable({name: 'booth_tag', joinColumn: {name: 'booth_id'}, inverseJoinColumn: {name: 'tag_id'}})
+    tags: Tag[]
+
+    @ManyToMany(()=>User, user=>user.id)
+    @JoinTable({name: 'booth_user', joinColumn: {name: 'booth_id'}, inverseJoinColumn: {name: 'subscriber_id'}})
+    subscribers: User[]
 }
 
 export enum BoothStatus {
