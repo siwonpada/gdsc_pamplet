@@ -1,22 +1,24 @@
-import { Controller, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
 import { EventService } from './event.service';
+import { CreateEventDto } from './dto/createEvent.dto';
+import { Event } from 'src/global/entity/event.entity';
 
 @Controller('booth/event')
 export class EventController {
     constructor(private readonly eventService: EventService) {}
 
     @Get('/search')
-    async searchEvent() {
-        return this.eventService.searchEvent();
+    async searchEvent(@Query('booth_id') booth_id: number, @Query('name') name: string): Promise<Event[]> {
+        return this.eventService.searchEvent(booth_id, name);
     }
 
     @Post('/')
-    async createEvent() {
-        return this.eventService.createEvent();
+    async createEvent(@Body() createEventDto: CreateEventDto): Promise<Event> {
+        return this.eventService.createEvent(createEventDto);
     }
 
     @Patch('/like')
-    async updatelike(){
-        return this.eventService.updatelike();
+    async updatelike(@Query('id') id: number, @Query('user_id') user_id: number): Promise<Event> {
+        return this.eventService.updatelike(id, user_id);
     }
 }

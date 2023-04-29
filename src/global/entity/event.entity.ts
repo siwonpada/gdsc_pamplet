@@ -10,7 +10,7 @@ export class Event extends BaseEntity {
     @Column('varchar', { name: 'name' })
     name: string
 
-    @Column('int', { name: 'like' })
+    @Column('int', { name: 'like', default: 0 })
     like: number
 
     @ManyToOne(()=>Booth, booth=>booth.id, {onDelete: 'CASCADE'})
