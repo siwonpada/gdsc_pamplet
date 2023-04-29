@@ -1,6 +1,7 @@
-import { Controller, Post, Get, Query } from '@nestjs/common';
+import { Controller, Post, Get, Query, Body } from '@nestjs/common';
 import { ExhibitionService } from './exhibition.service';
 import { Exhibition } from 'src/global/entity/exhibition.entity';
+import { CreateExhibitionDto } from './dto/createExhibition.dto';
 
 @Controller('exhibition')
 export class ExhibitionController {
@@ -17,7 +18,7 @@ export class ExhibitionController {
     }
 
     @Post('/')
-    async createExhibition(): Promise<Exhibition> {
-        return;
+    async createExhibition(@Body() createExhibitionDto: CreateExhibitionDto): Promise<Exhibition> {
+        return this.exhibitionService.createExhibition(createExhibitionDto);
     }
 }
