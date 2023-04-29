@@ -2,8 +2,10 @@ import { Controller, Post, Get, Query, Body } from '@nestjs/common';
 import { ExhibitionService } from './exhibition.service';
 import { Exhibition } from 'src/global/entity/exhibition.entity';
 import { CreateExhibitionDto } from './dto/createExhibition.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('exhibitions')
+@ApiTags('exhibitions')
 export class ExhibitionController {
   constructor(private readonly exhibitionService: ExhibitionService) {}
 

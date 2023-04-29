@@ -11,9 +11,10 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { Response } from 'express';
 import { ImageService } from './image.service';
-import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 
 @Controller('image')
+@ApiTags('file')
 export class ImageController {
   constructor(private imageService: ImageService) {}
 

@@ -10,8 +10,10 @@ import {
 import { MapService } from './map.service';
 import { CreateMapDto } from './dto/createMap.dto';
 import { UpdateSectionsDto } from './dto/updateSection.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('exhibitions/:exhibitionId/maps')
+@ApiTags('exhibitions')
 export class MapController {
   constructor(private readonly mapService: MapService) {}
 

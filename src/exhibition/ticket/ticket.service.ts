@@ -16,27 +16,40 @@ export class TicketService {
     @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
   ) {}
 
-  async getTicket({uuid}: getTicketDto): Promise<Ticket> {
-    const ticket = this.ticketRepository.findOne({ where: { uuid }, relations: ['role', 'exhibition'] });
+  async getTickets(exhibitionId: number): Promise<Ticket> {
+    const ticket = this.ticketRepository.findOne({
+      where: { exhibition: { id: exhibitionId } },
+      relations: ['role', 'exhibition'],
+    });
+    if (!ticket) {
+      throw new NotFoundException(
+        `Ticket with exhibition id ${exhibitionId} not found`,
+      );
+    }
+    return ticket;
+  }
+
+  async getTicket({ uuid }: getTicketDto): Promise<Ticket> {
+    const ticket = this.ticketRepository.findOne({
+      where: { uuid },
+      relations: ['role', 'exhibition'],
+    });
     if (!ticket) {
       throw new NotFoundException(`Ticket with uuid ${uuid} not found`);
     }
     return ticket;
   }
 
-  async createTicket({
-    name,
-    description,
-    price,
-    role_name,
-    exhibition_id,
-  }: CreateTicketDto): Promise<Ticket> {
+  async createTicket(
+    exhibitionId: number,
+    { name, description, price, role_name }: CreateTicketDto,
+  ): Promise<Ticket> {
     const exhibition = await this.exhibitionRepository.findOne({
-      where: { id: exhibition_id },
+      where: { id: exhibitionId },
     });
     if (!exhibition) {
       throw new NotFoundException(
-        `Exhibition with id ${exhibition_id} not found`,
+        `Exhibition with id ${exhibitionId} not found`,
       );
     }
     let role = await this.roleRepository.findOne({
@@ -45,10 +58,16 @@ export class TicketService {
     if (!role) {
       role = await this.roleRepository.save({ name: role_name });
     }
-    return this.ticketRepository.save({ name, description, price, role, exhibition });
+    return this.ticketRepository.save({
+      name,
+      description,
+      price,
+      role,
+      exhibition,
+    });
   }
 
-  async deleteTicket({uuid}: getTicketDto): Promise<void> {
+  async deleteTicket({ uuid }: getTicketDto): Promise<void> {
     const deleteResult = await this.ticketRepository.delete(uuid);
     if (deleteResult.affected === 0) {
       throw new NotFoundException(`Ticket with uuid ${uuid} not found`);
