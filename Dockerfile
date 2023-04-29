@@ -9,4 +9,4 @@ COPY . .
 # WORKDIR /app
 # COPY --from=builder /app ./
 # CMD ["npm", "run", "start:prod"]
-RUN npm run start
+CMD ["npm", "run", "start"]
