@@ -74,7 +74,7 @@ Table Ticket {
     price int
     description varchar
     role_i int [ref: < Role.id]
-    exhibition_id int [ref: < Exhibition.id]
+    exhibition_id int [ref: > Exhibition.id]
     user_id int [ref: < User.id]
 }
 

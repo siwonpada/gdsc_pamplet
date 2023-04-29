@@ -1,4 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "./role.entity";
+import { Ticket } from "./ticket.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -8,6 +10,11 @@ export class User extends BaseEntity {
     @Column('varchar', { name: 'nickname' })
     nickname: string
 
-    @Column('varchar', { name: 'department' })
-    department: string
+    @ManyToOne(()=>Role, role=>role.id)
+    @JoinColumn({name: 'role_id'})
+    role: Role
+
+    @ManyToOne(()=>Ticket, ticket=>ticket.uuid)
+    @JoinColumn({name: 'ticket_uuid'})
+    ticket: Ticket
 }
