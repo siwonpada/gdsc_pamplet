@@ -9,7 +9,7 @@ export class MapController {
     constructor(private readonly mapService: MapService) {}
     
     @Post('')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('image'))
     async createMap(@Query() createMapDto: CreateMapDto, @UploadedFile() file: Express.Multer.File) {
         return this.mapService.createMap(createMapDto, file);
     }   

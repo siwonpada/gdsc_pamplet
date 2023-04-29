@@ -12,6 +12,7 @@ import { AxiosError } from 'axios';
 import FormData from 'form-data';
 import { AiReturn } from './type/AiReturn.type';
 import { UpdateSectionsDto } from './dto/updateSection.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MapService {
@@ -24,6 +25,7 @@ export class MapService {
     @InjectRepository(Section)
     private readonly sectionRepository: Repository<Section>,
     private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   async createMap(
@@ -48,13 +50,13 @@ export class MapService {
       });
       await this.sectionRepository.insert(newSection);
     }
-    map = await this.mapRepository.findOne({where: {id: map.id}, relations: ['section']});
+    map = await this.mapRepository.findOne({where: {id: map.id}, relations: ['sections']});
     return map;
   }
 
   async updateSection(id: number, {sections}: UpdateSectionsDto): Promise<Map> {
     await this.sectionRepository.delete({id});
-    const map = await this.mapRepository.findOne({where: {id}, relations: ['section']});
+    const map = await this.mapRepository.findOne({where: {id}, relations: ['sections']});
     for (const section of sections) {
       const newSection = this.sectionRepository.create({
         block: section.block,
@@ -64,14 +66,14 @@ export class MapService {
       });
       await this.sectionRepository.insert(newSection);
     }
-    return this.mapRepository.findOne({where: {id}, relations: ['section']});
+    return this.mapRepository.findOne({where: {id}, relations: ['sections']});
   }
 
   async getAnalysis(file: Express.Multer.File): Promise<AiReturn[]> {
     const formData = new FormData();
-    formData.append('file', file.buffer, { filename: file.originalname });
+    formData.append('file', file?.buffer, { filename: file?.originalname });
     const { data } = await firstValueFrom(
-      this.httpService.post('http://127.0.0.1:8000/uploadfile', formData).pipe(
+      this.httpService.post(this.configService.get<string>('AI_URL'), formData).pipe(
         catchError((error: AxiosError) => {
           throw error;
         }),
