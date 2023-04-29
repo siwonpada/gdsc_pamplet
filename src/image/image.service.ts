@@ -17,6 +17,6 @@ export class ImageService {
 
     async downloadImg(id: number, res: Response) {
         const image = await this.imageRepository.findOne({where: {id}});
-        res.download(image.path);
+        res.download(image.path, image.name);
     }
 }

@@ -23,7 +23,7 @@ export class TagController {
     }
 
     @Delete('/')
-    async deleteTag(@Query('name') tagName: string): Promise<void> {
-        return;
+    async deleteTag(@Query('name') tagName: string, @Query('booth_id') boothId: number): Promise<void> {
+        return this.tagservice.deleteTag(tagName, boothId);
     }
 }

@@ -11,7 +11,4 @@ export class Image extends BaseEntity {
 
     @Column('varchar', { name: 'path'})
     path: string;
-
-    @ManyToOne(()=>Map, map=>map.id, {onDelete: 'CASCADE'})
-    map: Map;
 }

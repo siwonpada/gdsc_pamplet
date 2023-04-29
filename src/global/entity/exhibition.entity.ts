@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Booth } from "./booth.entity";
 
 @Entity()
 export class Exhibition extends BaseEntity {
@@ -7,4 +8,8 @@ export class Exhibition extends BaseEntity {
 
     @Column('varchar', { name: 'name' })
     name: string
+
+    @OneToOne(()=>Booth, booth=>booth.id)
+    @JoinColumn({name: 'manager_booth_id'})
+    managerBooth: Booth
 }

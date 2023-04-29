@@ -9,8 +9,8 @@ export class Section extends BaseEntity {
     @Column('varchar', { name: 'name' })
     name: string
 
-    @Column('varchar', { name: 'block' })
-    block: string
+    @Column({type: 'int', array: true, name: 'block'})
+    block: number[]
 
     @Column('int', {name: 'level'})
     level: number

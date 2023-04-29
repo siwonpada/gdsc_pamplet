@@ -5,7 +5,7 @@ Project Pamplet {
 Table User {
     id int [pk, increment]
     nickname varchar
-    department varchar
+    role_id int [ref: < Role.id]
 }
 
 Table Booth {
@@ -63,17 +63,24 @@ Table Section {
 Table Exhibition {
     id int [pk, increment]
     name varchar
+    manager_booth_id int [ref: - Booth.id]
     booth_id int [ref: < Booth.id]
     map_id int [ref: < Map.id]
 }
 
 Table Ticket {
-    id int [pk, increment]
+    UUID varchr [pk, note: '이것을 알고 있으면 입장가능']
     name varchar
     price int
     description varchar
+    role_i int [ref: < Role.id]
     exhibition_id int [ref: < Exhibition.id]
     user_id int [ref: < User.id]
+}
+
+Table Role{
+    id int 
+    department varchar
 }
 
 Table Image {
