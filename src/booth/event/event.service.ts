@@ -16,37 +16,36 @@ export class EventService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  async searchEvent(booth_id: number, name: string): Promise<Event[]> {
+  async searchEvent(booth_id: number, name?: string): Promise<Event[]> {
     return this.eventRepository.find({
-        where: {
-            booth: {id : booth_id},
-            name: Like(`${name}%`)
-        }
+      where: {
+        booth: { id: booth_id },
+        ...(name ? { name: Like(`${name}%`) } : {}),
+      },
     });
   }
 
-  async createEvent({name, booth_id}: CreateEventDto): Promise<Event> {
-    const booth = await this.boothRepository.findOne({where: {id: booth_id}});
+  async createEvent(
+    booth_id: number,
+    { name }: CreateEventDto,
+  ): Promise<Event> {
+    const booth = await this.boothRepository.findOne({
+      where: { id: booth_id },
+    });
     if (!booth) {
-      throw new NotFoundException(
-        `Booth with id ${booth_id} not found`,
-      );
+      throw new NotFoundException(`Booth with id ${booth_id} not found`);
     }
-    return this.eventRepository.save({name, booth})
+    return this.eventRepository.save({ name, booth });
   }
 
-  async updatelike(id, user_id): Promise<Event> {
-    const event = await this.eventRepository.findOne({where: {id}});
-    const user = await this.userRepository.findOne({where: {id: user_id}});
+  async updatelike(id: number, user_id: number): Promise<Event> {
+    const event = await this.eventRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({ where: { id: user_id } });
     if (!event) {
-      throw new NotFoundException(
-        `Event with id ${id} not found`,
-      );
+      throw new NotFoundException(`Event with id ${id} not found`);
     }
     if (!user) {
-      throw new NotFoundException(
-        `User with id ${user_id} not found`,
-      );
+      throw new NotFoundException(`User with id ${user_id} not found`);
     }
     event.likedUsers.push(user);
     event.like += 1;
