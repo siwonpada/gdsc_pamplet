@@ -23,17 +23,17 @@ export class BoothController {
     }
 
     @Patch('/attendee')
-    async updateAttendeeCount(@Query('id') id: number, @Body() attendeeCount: number): Promise<Booth> {
+    async updateAttendeeCount(@Query('id') id: number, @Body('attendee_count') attendeeCount: number): Promise<Booth> {
         return this.boothService.updateAttendeeCount(id, attendeeCount);
     }
 
     @Patch('/status')
-    async updateBoothStatus(@Query('id') id: number, @Body() status: BoothStatus): Promise<Booth> {
+    async updateBoothStatus(@Query('id') id: number, @Body('status') status: BoothStatus): Promise<Booth> {
         return this.boothService.updateBoothStatus(id, status);
     }
 
     @Patch('/long_description')
-    async updateLongDescription(@Query('id') id: number, @Body() longDescription: string): Promise<Booth> {
+    async updateLongDescription(@Query('id') id: number, @Body('long_description') longDescription: string): Promise<Booth> {
         return this.boothService.updateLongDescription(id, longDescription);
     }
 

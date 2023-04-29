@@ -7,8 +7,8 @@ export class ItemController {
     constructor(private readonly itemService: ItemService) {}
 
     @Get('/search')
-    async searchItem() {
-        return this.itemService.searchItem();
+    async searchItem(@Query('name') name: string) {
+        return this.itemService.searchItem(name);
     }
 
     @Post('/')

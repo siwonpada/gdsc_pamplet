@@ -26,11 +26,14 @@ export class TagService {
 
   async addTag(tagName: string, boothId: number): Promise<Booth> {
     const booth = await this.boothRepository.findOne({ where: { id: boothId } });
-    let tag = await this.tagRepository.findOne({ where: { name: tagName } });
-    if (tag === null) {
-      tag = await this.tagRepository.save({ name: tagName });
-    }
+    const tag = await this.getTag(tagName);
     booth.tags.push(tag);
     return this.boothRepository.save(booth);
+  }
+
+  async deleteTag(tagName: string, boothId: number): Promise<void> {
+    const booth = await this.boothRepository.findOne({ where: { id: boothId } });
+    const tag = await this.tagRepository.findOne({where : {name : tagName}});
+    booth.tags.filter((t)=>t.id!==tag.id);
   }
 }
