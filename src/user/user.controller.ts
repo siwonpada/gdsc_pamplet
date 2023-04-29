@@ -11,9 +11,4 @@ export class UserController {
     async createUser(@Body() body: CreateUserDto) {
         return this.userService.createUser(body);
     }
-
-    @Patch('/')
-    async updateUser(@Body() body: UpdateUserDto) {
-        return this.userService.updateUser(body);
-    }
 }
