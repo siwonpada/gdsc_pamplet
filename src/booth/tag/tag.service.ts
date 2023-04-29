@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booth } from 'src/global/entity/booth.entity';
 import { Tag } from 'src/global/entity/tag.entity';
@@ -26,6 +26,11 @@ export class TagService {
 
   async addTag(tagName: string, boothId: number): Promise<Booth> {
     const booth = await this.boothRepository.findOne({ where: { id: boothId } });
+    if (!booth) {
+      throw new NotFoundException(
+        `Booth with id ${boothId} not found`,
+      );
+    }
     const tag = await this.getTag(tagName);
     booth.tags.push(tag);
     return this.boothRepository.save(booth);
@@ -33,6 +38,11 @@ export class TagService {
 
   async deleteTag(tagName: string, boothId: number): Promise<void> {
     const booth = await this.boothRepository.findOne({ where: { id: boothId } });
+    if (!booth) {
+      throw new NotFoundException(
+        `Booth with id ${boothId} not found`,
+      );
+    }
     const tag = await this.tagRepository.findOne({where : {name : tagName}});
     booth.tags.filter((t)=>t.id!==tag.id);
   }

@@ -8,9 +8,10 @@ import { ItemModule } from './item/item.module';
 import { TagModule } from './tag/tag.module';
 import { User } from 'src/global/entity/user.entity';
 import { Exhibition } from 'src/global/entity/exhibition.entity';
+import { Section } from 'src/global/entity/section.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Booth, User, Exhibition]), EventModule, ItemModule, TagModule],
+  imports: [TypeOrmModule.forFeature([Booth, User, Exhibition, Section]), EventModule, ItemModule, TagModule],
   controllers: [BoothController],
   providers: [BoothService],
 })

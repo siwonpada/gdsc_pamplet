@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booth } from 'src/global/entity/booth.entity';
 import { Event } from 'src/global/entity/event.entity';
@@ -27,12 +27,27 @@ export class EventService {
 
   async createEvent({name, booth_id}: CreateEventDto): Promise<Event> {
     const booth = await this.boothRepository.findOne({where: {id: booth_id}});
+    if (!booth) {
+      throw new NotFoundException(
+        `Booth with id ${booth_id} not found`,
+      );
+    }
     return this.eventRepository.save({name, booth})
   }
 
   async updatelike(id, user_id): Promise<Event> {
     const event = await this.eventRepository.findOne({where: {id}});
     const user = await this.userRepository.findOne({where: {id: user_id}});
+    if (!event) {
+      throw new NotFoundException(
+        `Event with id ${id} not found`,
+      );
+    }
+    if (!user) {
+      throw new NotFoundException(
+        `User with id ${user_id} not found`,
+      );
+    }
     event.likedUsers.push(user);
     event.like += 1;
 

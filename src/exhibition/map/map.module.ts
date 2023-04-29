@@ -7,6 +7,7 @@ import { Section } from 'src/global/entity/section.entity';
 import { Exhibition } from 'src/global/entity/exhibition.entity';
 import { Image } from 'src/global/entity/image.entity';
 import { HttpModule } from '@nestjs/axios';
+import { Booth } from 'src/global/entity/booth.entity';
 
 @Module({
   imports: [

@@ -6,6 +6,7 @@ import { CreateBoothDto } from './dto/createBooth.dto';
 import { User } from 'src/global/entity/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Exhibition } from 'src/global/entity/exhibition.entity';
+import { Section } from 'src/global/entity/section.entity';
 
 @Injectable()
 export class BoothService {
@@ -16,6 +17,8 @@ export class BoothService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Exhibition)
     private readonly exhibitionRepository: Repository<Exhibition>,
+    @InjectRepository(Section)
+    private readonly sectionRepository: Repository<Section>,
   ) {}
 
   async getAllBooths(): Promise<Booth[]> {
@@ -32,6 +35,11 @@ export class BoothService {
 
   async createBooth(boothDto: CreateBoothDto, exhibition_id:number): Promise<Booth> {
     const exhibition = await this.exhibitionRepository.findOne({ where: { id: exhibition_id } });
+    if (!exhibition) {
+      throw new NotFoundException(
+        `Exhibition with id ${exhibition_id} not found`,
+      );
+    }
     const { password, ...rest } = boothDto;
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.boothRepository.save({
@@ -80,7 +88,30 @@ export class BoothService {
     const user = await this.userRepository.findOne({
       where: { id: subcriberId },
     });
-    booth.subscribers.push(user);
+    if(!user){
+      throw new NotFoundException(`User with id ${subcriberId} not found`);
+    }
+
+    if (subscribe) {
+      booth.subscribers.push(user);
+    } else {
+      booth.subscribers = booth.subscribers.filter(
+        (subscriber) => subscriber.id !== subcriberId,
+      );
+    }
+    return this.boothRepository.save(booth);
+  }
+
+  async updateBoothSection(booth_id: number, section_id: number): Promise<Booth> {
+    const booth = await this.boothRepository.findOne({where: {id: booth_id}, relations: ['section']});
+    if (!booth) {
+      throw new NotFoundException(`Booth with id ${booth_id} not found`);
+    }
+    const section = await this.sectionRepository.findOne({where: {id: section_id}});
+    if (!section) {
+      throw new NotFoundException(`Section with id ${section_id} not found`);
+    }
+    booth.section = section;
     return this.boothRepository.save(booth);
   }
 

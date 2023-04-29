@@ -34,6 +34,11 @@ export class TicketService {
     const exhibition = await this.exhibitionRepository.findOne({
       where: { id: exhibition_id },
     });
+    if (!exhibition) {
+      throw new NotFoundException(
+        `Exhibition with id ${exhibition_id} not found`,
+      );
+    }
     let role = await this.roleRepository.findOne({
       where: { name: role_name },
     });
@@ -43,8 +48,10 @@ export class TicketService {
     return this.ticketRepository.save({ name, description, price, role, exhibition });
   }
 
-  async deleteTicket(uuid: string): Promise<Ticket> {
-    const ticket = await this.ticketRepository.findOne({ where: { uuid } });
-    return this.ticketRepository.remove(ticket);
+  async deleteTicket({uuid}: getTicketDto): Promise<void> {
+    const deleteResult = await this.ticketRepository.delete(uuid);
+    if (deleteResult.affected === 0) {
+      throw new NotFoundException(`Ticket with uuid ${uuid} not found`);
+    }
   }
 }

@@ -1,14 +1,15 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 import { CreateTicketDto } from './dto/createTicket.dto';
+import { getTicketDto } from './dto/getTicket.dto';
 
 @Controller('exhibition/ticket')
 export class TicketController {
     constructor(private readonly ticketService:TicketService) {}
 
     @Get('')
-    async getTicket(@Query('uuid')uuid: string) {
-        return await this.ticketService.getTicket(uuid);
+    async getTicket(@Query() query: getTicketDto) {
+        return this.ticketService.getTicket(query);
     }
 
     @Post('')
@@ -17,7 +18,7 @@ export class TicketController {
     } 
 
     @Delete('')
-    async deleteTicket(@Query('uuid')uuid: string) {
-        return await this.ticketService.deleteTicket(uuid);
+    async deleteTicket(@Query() query: getTicketDto) {
+        return await this.ticketService.deleteTicket(query);
     }
 }

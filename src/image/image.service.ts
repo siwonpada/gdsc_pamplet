@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Response } from 'express';
@@ -17,6 +17,9 @@ export class ImageService {
 
     async downloadImg(id: number, res: Response) {
         const image = await this.imageRepository.findOne({where: {id}});
+        if (!image) {
+            throw new NotFoundException(`Image with id ${id} not found`);
+        }
         res.download(image.path, image.name);
     }
 }

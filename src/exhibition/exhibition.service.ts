@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Exhibition } from 'src/global/entity/exhibition.entity';
 import { Repository } from 'typeorm';
@@ -13,7 +13,11 @@ export class ExhibitionService {
     }
 
     async getExhibitionById(id: number): Promise<Exhibition> {
-        return this.exhibitionRepository.findOne({where: {id}, relations: ['booths']});
+        const exhibition = this.exhibitionRepository.findOne({where: {id}, relations: ['booths']});
+        if (!exhibition) {
+            throw new NotFoundException(`Exhibition with id ${id} not found`);
+        }
+        return exhibition;
     }
 
     async createExhibition({name}: CreateExhibitionDto): Promise<Exhibition> {
