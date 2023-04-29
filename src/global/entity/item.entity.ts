@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Booth } from "./booth.entity";
+import { Image } from "./image.entity";
 
 @Entity()
 export class Item extends BaseEntity {
@@ -15,8 +16,9 @@ export class Item extends BaseEntity {
     @Column('int', { name: 'price' })
     price: number
 
-    @Column('varchar', { name: 'image' })
-    image: string
+    @OneToOne(()=>Image, image=>image.id)
+    @JoinColumn({name: 'image_id'})
+    image: Image
 
     @ManyToOne(()=>Booth, booth=>booth.id, {onDelete: 'CASCADE'})
     @JoinColumn({name: 'booth_id'})

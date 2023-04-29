@@ -76,5 +76,5 @@ Table Ticket {
 
 Table Image {
     id int [pk, increment]
-    image BLOB
+    path varchar
 }

@@ -3,6 +3,7 @@ import { Section } from "./section.entity";
 import { Exhibition } from "./exhibition.entity";
 import { Tag } from "./tag.entity";
 import { User } from "./user.entity";
+import { Image } from "./image.entity";
 
 @Entity()
 export class Booth extends BaseEntity {
@@ -21,11 +22,12 @@ export class Booth extends BaseEntity {
     @Column('text', { name: 'long_description' })
     longDescription: string;
 
-    @Column('varchar', { name: 'image' })
-    image: string;
-
     @Column('int', { name: 'status', default: 0})
     status: number;
+
+    @OneToOne(()=>Image, image=>image.id)
+    @JoinColumn({name: 'image_id'})
+    image: Image;
 
     @OneToOne(()=>Section, section=>section.id)
     @JoinColumn({name: 'section_id'})

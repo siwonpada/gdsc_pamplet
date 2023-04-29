@@ -8,9 +8,6 @@ export class Map extends BaseEntity {
 
     @Column('varchar', { name: 'name' })
     name: string
-    
-    @Column('varchar', { name: 'image' })
-    image: string
 
     @ManyToOne(()=>Exhibition, exhibition=>exhibition.id, {onDelete: 'CASCADE'})
     @JoinColumn({name: 'exhibition_id'})
