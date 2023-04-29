@@ -9,4 +9,9 @@ export class MapController {
     async createMap() {
         return this.mapService.createMap();
     }
+
+    @Post('/section')
+    async createSections() {
+        
+    }
 }

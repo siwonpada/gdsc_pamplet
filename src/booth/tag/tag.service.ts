@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Booth } from 'src/global/entity/booth.entity';
 import { Tag } from 'src/global/entity/tag.entity';
 import { Like, Repository } from 'typeorm';
 
@@ -7,6 +8,7 @@ import { Like, Repository } from 'typeorm';
 export class TagService {
   constructor(
     @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+    @InjectRepository(Booth) private readonly boothRepository: Repository<Booth>,
   ) {}
 
   async searchTag(tagName: string): Promise<Tag[]> {
@@ -20,5 +22,15 @@ export class TagService {
     } else {
       return tag;
     }
+  }
+
+  async addTag(tagName: string, boothId: number): Promise<Booth> {
+    const booth = await this.boothRepository.findOne({ where: { id: boothId } });
+    let tag = await this.tagRepository.findOne({ where: { name: tagName } });
+    if (tag === null) {
+      tag = await this.tagRepository.save({ name: tagName });
+    }
+    booth.tags.push(tag);
+    return this.boothRepository.save(booth);
   }
 }

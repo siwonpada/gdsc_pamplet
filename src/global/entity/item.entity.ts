@@ -16,6 +16,9 @@ export class Item extends BaseEntity {
     @Column('int', { name: 'price' })
     price: number
 
+    @Column({array: true, type: 'varchar', name: 'category'})
+    category: string[]
+
     @OneToOne(()=>Image, image=>image.id)
     @JoinColumn({name: 'image_id'})
     image: Image

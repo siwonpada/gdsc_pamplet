@@ -12,6 +12,9 @@ export class Section extends BaseEntity {
     @Column('varchar', { name: 'block' })
     block: string
 
+    @Column('int', {name: 'level'})
+    level: number
+
     @ManyToOne(()=>Map, map=>map.id, {onDelete: 'CASCADE'})
     @JoinColumn({name: 'map_id'})
     map: Map

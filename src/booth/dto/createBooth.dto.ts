@@ -10,9 +10,6 @@ export class CreateBoothDto {
     @IsString()
     long_description: string
 
-    @IsString()
-    image: string
-
     @IsNumber()
     @Max(2)
     @Min(0)

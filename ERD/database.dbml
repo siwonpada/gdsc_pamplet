@@ -32,6 +32,7 @@ Table Item {
     name varchar
     description varchar
     price int
+    category varchar
     image int [ref: < Image.id]
     deletion_flag boolean
     last_updated datetime
@@ -54,7 +55,8 @@ Table Map {
 Table Section {
     id int [pk, increment]
     name varchar
-    blocks varchar
+    block varchar
+    level int
     booths_id int [ref: - Booth.id]
 }
 
