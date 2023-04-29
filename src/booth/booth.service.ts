@@ -33,8 +33,13 @@ export class BoothService {
     return booth;
   }
 
-  async createBooth(boothDto: CreateBoothDto, exhibition_id:number): Promise<Booth> {
-    const exhibition = await this.exhibitionRepository.findOne({ where: { id: exhibition_id } });
+  async createBooth({
+    exhibition_id,
+    ...boothDto
+  }: CreateBoothDto): Promise<Booth> {
+    const exhibition = await this.exhibitionRepository.findOne({
+      where: { id: exhibition_id },
+    });
     if (!exhibition) {
       throw new NotFoundException(
         `Exhibition with id ${exhibition_id} not found`,
@@ -88,7 +93,7 @@ export class BoothService {
     const user = await this.userRepository.findOne({
       where: { id: subcriberId },
     });
-    if(!user){
+    if (!user) {
       throw new NotFoundException(`User with id ${subcriberId} not found`);
     }
 
@@ -102,12 +107,20 @@ export class BoothService {
     return this.boothRepository.save(booth);
   }
 
-  async updateBoothSection(booth_id: number, section_id: number): Promise<Booth> {
-    const booth = await this.boothRepository.findOne({where: {id: booth_id}, relations: ['section']});
+  async updateBoothSection(
+    booth_id: number,
+    section_id: number,
+  ): Promise<Booth> {
+    const booth = await this.boothRepository.findOne({
+      where: { id: booth_id },
+      relations: ['section'],
+    });
     if (!booth) {
       throw new NotFoundException(`Booth with id ${booth_id} not found`);
     }
-    const section = await this.sectionRepository.findOne({where: {id: section_id}});
+    const section = await this.sectionRepository.findOne({
+      where: { id: section_id },
+    });
     if (!section) {
       throw new NotFoundException(`Section with id ${section_id} not found`);
     }
