@@ -29,14 +29,43 @@ export class MapService {
     private readonly configService: ConfigService,
   ) {}
 
-  async createMap(
-    { name, exhibition_id, image_id }: CreateMapDto,
-  ): Promise<Map> {
+  async getMaps(exhibitionId: number): Promise<Map[]> {
     const exhibition = await this.exhibitionRepository.findOne({
-      where: { id: exhibition_id },
+      where: { id: exhibitionId },
     });
     if (!exhibition) {
-      throw new NotFoundException(`Exhibition with id ${exhibition_id} not found`);
+      throw new NotFoundException(
+        `Exhibition with id ${exhibitionId} not found`,
+      );
+    }
+    return this.mapRepository.find({
+      where: { exhibition: { id: exhibitionId } },
+      relations: ['sections'],
+    });
+  }
+
+  async getMap(id: number): Promise<Map> {
+    const map = await this.mapRepository.findOne({
+      where: { id },
+      relations: ['sections'],
+    });
+    if (!map) {
+      throw new NotFoundException(`Map with id ${id} not found`);
+    }
+    return map;
+  }
+
+  async createMap(
+    exhibitionId: number,
+    { name, image_id }: CreateMapDto,
+  ): Promise<Map> {
+    const exhibition = await this.exhibitionRepository.findOne({
+      where: { id: exhibitionId },
+    });
+    if (!exhibition) {
+      throw new NotFoundException(
+        `Exhibition with id ${exhibitionId} not found`,
+      );
     }
     const image = await this.imageRepository.findOne({
       where: { id: image_id },
@@ -45,7 +74,7 @@ export class MapService {
       throw new NotFoundException(`Image with id ${image_id} not found`);
     }
 
-    let map = await this.mapRepository.save({name, exhibition, image})
+    const map = await this.mapRepository.save({ name, exhibition, image });
     const data = await this.getAnalysis(image);
     for (const section of data) {
       const newSection = this.sectionRepository.create({
@@ -56,16 +85,24 @@ export class MapService {
       });
       await this.sectionRepository.insert(newSection);
     }
-    map = await this.mapRepository.findOne({where: {id: map.id}, relations: ['sections']});
-    return map;
+    return this.mapRepository.findOne({
+      where: { id: map.id },
+      relations: ['sections'],
+    });
   }
 
-  async updateSection(id: number, {sections}: UpdateSectionsDto): Promise<Map> {
-    const map = await this.mapRepository.findOne({where: {id}, relations: ['sections']});
+  async updateSection(
+    id: number,
+    { sections }: UpdateSectionsDto,
+  ): Promise<Map> {
+    const map = await this.mapRepository.findOne({
+      where: { id },
+      relations: ['sections'],
+    });
     if (!map) {
       throw new NotFoundException(`Map with id ${id} not found`);
     }
-    await this.sectionRepository.delete({map: {id}});
+    await this.sectionRepository.delete({ map: { id } });
     for (const section of sections) {
       const newSection = this.sectionRepository.create({
         block: section.block,
@@ -75,18 +112,25 @@ export class MapService {
       });
       await this.sectionRepository.insert(newSection);
     }
-    return this.mapRepository.findOne({where: {id}, relations: ['sections']});
+    return this.mapRepository.findOne({
+      where: { id },
+      relations: ['sections'],
+    });
   }
 
   async getAnalysis(image: Image): Promise<AiReturn[]> {
     const formData = new FormData();
-    formData.append('file', (await fs.readFile(image.path)) , { filename: image.name });
+    formData.append('file', await fs.readFile(image.path), {
+      filename: image.name,
+    });
     const { data } = await firstValueFrom(
-      this.httpService.post(this.configService.get<string>('AI_URL'), formData).pipe(
-        catchError((error: AxiosError) => {
-          throw error;
-        }),
-      ),
+      this.httpService
+        .post(this.configService.get<string>('AI_URL'), formData)
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw error;
+          }),
+        ),
     );
     return data.bbox;
   }
