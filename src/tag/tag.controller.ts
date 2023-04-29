@@ -1,4 +1,4 @@
-import { Controller, Query, Get } from '@nestjs/common';
+import { Controller, Query, Get, Delete } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { Tag } from 'src/global/entity/tag.entity';
 
@@ -14,5 +14,10 @@ export class TagController {
     @Get('/search')
     async searchTag(@Query('name') tagName: string): Promise<Tag[]> {
         return this.tagservice.searchTag(tagName);
+    }
+
+    @Delete('/')
+    async deleteTag(@Query('name') tagName: string): Promise<void> {
+        return;
     }
 }
