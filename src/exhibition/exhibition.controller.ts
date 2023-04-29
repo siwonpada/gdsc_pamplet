@@ -9,12 +9,12 @@ export class ExhibitionController {
 
     @Get('')
     async getAllExhibitions(): Promise<Exhibition[]> {
-        return;
+        return this.exhibitionService.getAllExhibitions();
     }
 
     @Get('/find')
     async getExhibitionById(@Query('id') id:number): Promise<Exhibition> {
-        return;
+        return this.exhibitionService.getExhibitionById(id);
     }
 
     @Post('/')
