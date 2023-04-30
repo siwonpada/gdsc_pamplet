@@ -16,8 +16,8 @@ export class TicketService {
     @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
   ) {}
 
-  async getTickets(exhibitionId: number): Promise<Ticket> {
-    const ticket = this.ticketRepository.findOne({
+  async getTickets(exhibitionId: number): Promise<Ticket[]> {
+    const ticket = this.ticketRepository.find({
       where: { exhibition: { id: exhibitionId } },
       relations: ['role', 'exhibition'],
     });
