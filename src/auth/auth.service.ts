@@ -18,7 +18,7 @@ export class AuthService {
 
   async getJWTToken(name: string, password: string): Promise<string> {
     const booth = await this.validateBooth(name, password);
-    const payload = { name: booth.name, sub: booth.id };
+    const payload = { name: booth.name, sub: booth.id, exhibition_id: booth.exhibition.id };
     const token = this.jwtService.sign(payload);
     return token;
   }
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   async validateBooth(name: string, password: string): Promise<Booth> {
-    const booths = await this.boothRepository.find({ where: { name }, select: ['password', 'id', 'name'] });
+    const booths = await this.boothRepository.find({ where: { name }, select: ['password', 'id', 'name'], relations: ['exhibition'] });
     console.log(booths);
     for (const booth of booths) {
       try {
