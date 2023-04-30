@@ -114,6 +114,12 @@ export class BoothController {
   }
 
   @Patch('/:id/section')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { section_id: { type: 'number' } },
+    },
+  })
   async updateSection(@Param('id') id: number, @Query('section_id') section_id: number): Promise<Booth> {
     return this.boothService.updateBoothSection(id, section_id);
   }
