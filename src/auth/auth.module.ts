@@ -7,7 +7,9 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthStrategy } from './guard/auth.strategy';
+import { AuthStrategy, ManagerAuthStrategy } from './guard/auth.strategy';
+import { BoothGuard } from './guard/auth.guard';
+import { ManagerBoothGuard } from './guard/managerAuth.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Booth, Exhibition, User]),ConfigModule,JwtModule.registerAsync({
@@ -18,7 +20,7 @@ import { AuthStrategy } from './guard/auth.strategy';
       signOptions: { expiresIn: configService.get<string>('JWT_EXPIRATION') },
     }),
   })],
-  providers: [AuthService, AuthStrategy],
+  providers: [AuthService, AuthStrategy, BoothGuard, ManagerAuthStrategy, ManagerBoothGuard],
   controllers: [AuthController],
 })
 export class AuthModule {}

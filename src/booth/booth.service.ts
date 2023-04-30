@@ -7,6 +7,7 @@ import { User } from 'src/global/entity/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Exhibition } from 'src/global/entity/exhibition.entity';
 import { Section } from 'src/global/entity/section.entity';
+import { Image } from 'src/global/entity/image.entity';
 
 @Injectable()
 export class BoothService {
@@ -19,6 +20,8 @@ export class BoothService {
     private readonly exhibitionRepository: Repository<Exhibition>,
     @InjectRepository(Section)
     private readonly sectionRepository: Repository<Section>,
+    @InjectRepository(Image)
+    private readonly imageRepository: Repository<Image>,
   ) {}
 
   async getAllBooths(): Promise<Booth[]> {
@@ -57,6 +60,36 @@ export class BoothService {
     });
   }
 
+  async createManagerBooth({exhibition_id, ...BoothDto}: CreateBoothDto):Promise<Booth> {
+    const exhibition = await this.exhibitionRepository.findOne({
+      where: { id: exhibition_id },
+    });
+    if (!exhibition) {
+      throw new NotFoundException(
+        `Exhibition with id ${exhibition_id} not found`,
+      );
+    }
+    const { password, ...rest } = BoothDto;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const booth = await this.boothRepository.save({
+      name: rest.name,
+      shortDescription: rest.short_description,
+      longDescription: rest.long_description,
+      status: rest.status,
+      password: hashedPassword,
+      exhibition: exhibition,
+    })
+    exhibition.managerBooth = booth;
+    await this.exhibitionRepository.save(exhibition);
+    return booth;
+  }
+
+  async updateBoothName(boothId: number, name: string): Promise<Booth> {
+    const booth = await this.getBoothById(boothId);
+    booth.name = name;
+    return this.boothRepository.save(booth);
+  }
+
   async updateAttendeeCount(
     boothId: number,
     attendeeCount: number,
@@ -81,6 +114,22 @@ export class BoothService {
   ): Promise<Booth> {
     const booth = await this.getBoothById(boothId);
     booth.longDescription = longDescription;
+    return this.boothRepository.save(booth);
+  }
+
+  async updateShortDescription(
+    boothId: number,
+    shortDescription: string,
+  ): Promise<Booth> {
+    const booth = await this.getBoothById(boothId);
+    booth.shortDescription = shortDescription;
+    return this.boothRepository.save(booth);
+  }
+
+  async updateFile(boothId: number, image_id: number): Promise<Booth> {
+    const booth = await this.getBoothById(boothId);
+    const image = await this.imageRepository.findOne({ where: { id: image_id } });
+    booth.image = image;
     return this.boothRepository.save(booth);
   }
 

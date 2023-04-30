@@ -32,6 +32,19 @@ export class BoothController {
     return this.boothService.createBooth(boothDto);
   }
 
+  @Post('manager')
+  async craeteMangerBooth(@Body() boothDto: CreateBoothDto): Promise<Booth> {
+    return this.boothService.createManagerBooth(boothDto);
+  }
+
+  @Patch('/:id/name')
+  async updateBoothName(
+    @Param('id') id: number,
+    @Body('name') name: string,
+  ): Promise<Booth> {
+    return this.boothService.updateBoothName(id, name);
+  }
+
   @Patch('/:id/attendee')
   async updateAttendeeCount(
     @Param('id') id: number,
@@ -51,6 +64,14 @@ export class BoothController {
     return this.boothService.updateBoothStatus(id, status);
   }
 
+  @Patch('/:id/short_description')
+  async updateShortDescription(
+    @Param('id') id: number,
+    @Body('short_description') shortDescription: string,
+  ): Promise<Booth> {
+    return this.boothService.updateShortDescription(id, shortDescription);
+  }
+
   @Patch('/:id/long_description')
   @ApiBody({
     schema: {
@@ -63,6 +84,14 @@ export class BoothController {
     @Body('long_description') longDescription: string,
   ): Promise<Booth> {
     return this.boothService.updateLongDescription(id, longDescription);
+  }
+
+  @Patch('/:id/image')
+  async updateFile(
+    @Param('id') id: number,
+    @Body('image_id') image_id: number,
+  ): Promise<Booth> {
+    return this.boothService.updateFile(id, image_id);
   }
 
   @Patch('/:id/subscribe')
