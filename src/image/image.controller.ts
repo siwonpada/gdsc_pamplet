@@ -11,7 +11,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { Response } from 'express';
 import { ImageService } from './image.service';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiExtraModels, ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { Image } from 'src/global/entity/image.entity';
 
 @Controller('image')
 @ApiTags('file')
@@ -32,7 +33,7 @@ export class ImageController {
     },
   })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<Image> {
     return this.imageService.uploadImg(file);
   }
 

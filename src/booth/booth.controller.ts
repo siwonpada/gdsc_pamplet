@@ -6,6 +6,7 @@ import {
   Post,
   Patch,
   Param,
+  Query,
 } from '@nestjs/common';
 import { BoothService } from './booth.service';
 import { Booth, BoothStatus } from 'src/global/entity/booth.entity';
@@ -110,6 +111,11 @@ export class BoothController {
     @Body('subcriber_id') subscriberId: number,
   ): Promise<Booth> {
     return this.boothService.updataSubscribe(id, subscribe, subscriberId);
+  }
+
+  @Patch('/:id/section')
+  async updateSection(@Param('id') id: number, @Query('section_id') section_id: number): Promise<Booth> {
+    return this.boothService.updateBoothSection(id, section_id);
   }
 
   @Delete(':id')
