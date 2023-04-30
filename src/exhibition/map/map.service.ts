@@ -40,14 +40,14 @@ export class MapService {
     }
     return this.mapRepository.find({
       where: { exhibition: { id: exhibitionId } },
-      relations: ['sections'],
+      relations: ['sections', 'image'],
     });
   }
 
   async getMap(id: number): Promise<Map> {
     const map = await this.mapRepository.findOne({
       where: { id },
-      relations: ['sections'],
+      relations: ['sections', 'image'],
     });
     if (!map) {
       throw new NotFoundException(`Map with id ${id} not found`);
