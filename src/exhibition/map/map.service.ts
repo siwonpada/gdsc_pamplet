@@ -55,6 +55,14 @@ export class MapService {
     return map;
   }
 
+  async getSection(sectionId: number): Promise<Section> {
+    const section = await this.sectionRepository.findOne({
+      where: { id: sectionId },
+      relations: ['booth'],
+    });
+    return section;
+  }
+
   async createMap(
     exhibitionId: number,
     { name, image_id }: CreateMapDto,

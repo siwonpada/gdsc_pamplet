@@ -14,6 +14,11 @@ export class MapController {
     return this.mapService.getMaps(id);
   }
 
+  @Get(':id/sections/:sectionId')
+  async getSection(@Param('sectionId') sectionId: number) {
+    return this.mapService.getSection(sectionId);
+  }
+
   @Get(':id')
   @ApiParam({ name: 'exhibitionId', type: Number })
   async getMap(@Param('id') id: number) {
@@ -28,7 +33,7 @@ export class MapController {
     return this.mapService.createMap(exhibitionId, createMapDto);
   }
 
-  @Patch('/:id/section')
+  @Patch('/:id/sections')
   @ApiParam({ name: 'exhibitionId', type: Number })
   async updateSection(
     @Param('id') id: number,

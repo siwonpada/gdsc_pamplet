@@ -29,8 +29,10 @@ export class BoothController {
   }
 
   @Post('')
-  async createBooth(@Body() boothDto: CreateBoothDto): Promise<Booth> {
-    return this.boothService.createBooth(boothDto);
+  async createBooth(@Body() boothDto: CreateBoothDto): Promise<Partial<Booth>> {
+    const booth = await this.boothService.createBooth(boothDto);
+    const { password, ...rest } = booth;
+    return rest;
   }
 
   @Post('manager')
