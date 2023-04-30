@@ -29,7 +29,7 @@ export class BoothService {
   }
 
   async getBoothById(boothId: number): Promise<Booth> {
-    const booth = this.boothRepository.findOne({ where: { id: boothId } });
+    const booth = this.boothRepository.findOne({ where: { id: boothId }, relations: ['section'] });
     if (!booth) {
       throw new NotFoundException(`Booth with id ${boothId} not found`);
     }
